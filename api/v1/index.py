@@ -1,8 +1,9 @@
 """
 Vercel serverless entry for Django. All /api/v1/* requests are routed here.
-Uses BaseHTTPRequestHandler; builds WSGI environ, strips /api/v1, delegates to Django.
+Extends BaseHTTPRequestHandler so Vercel populates path, command, headers, rfile; builds WSGI environ, strips /api/v1, delegates to Django.
 """
 import io
+from http.server import BaseHTTPRequestHandler
 import os
 import sys
 
@@ -74,8 +75,9 @@ def _start_response(status, response_headers, exc_info=None):
     return result
 
 
-class handler:
-    """Vercel Python handler: delegate to Django WSGI app."""
+class handler(BaseHTTPRequestHandler):
+    """Vercel Python handler: delegate to Django WSGI app. Must extend BaseHTTPRequestHandler so request method/path/body are set."""
+    log_message = lambda *args: None  # no-op; avoid default stderr logging in serverless
 
     def do_GET(self):
         self._dispatch()
