@@ -7,7 +7,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key-change-in-production")
 
 DEBUG = os.environ.get("DEBUG", "True").lower() in ("true", "1", "yes")
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1,.vercel.app").split(",")
+ALLOWED_HOSTS = [h.strip() for h in os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1,.vercel.app").split(",") if h.strip()]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -75,4 +75,6 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [],  # per-view; health/cron use AllowAny
 }
 
-CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ORIGINS", "http://localhost:3000").split(",")
+# Allow both localhost and 127.0.0.1 so CORS works whether user opens app via localhost or 127.0.0.1
+_default_cors = "http://localhost:3000,http://127.0.0.1:3000"
+CORS_ALLOWED_ORIGINS = [o.strip() for o in os.environ.get("CORS_ORIGINS", _default_cors).split(",") if o.strip()]

@@ -50,6 +50,13 @@ curl -H "Authorization: Bearer YOUR_CRON_SECRET" "http://localhost:8000/api/v1/c
 
 Set `CRON_SECRET` in your env (or `.env`) and use the same value in the request.
 
+### CORS and using the deployed API
+
+- **CORS**: The backend allows requests from `http://localhost:3000` and `http://127.0.0.1:3000` by default. If you see a CORS error, open the app with the same host you use in the API (e.g. use `http://localhost:3000` in the browser if your API is `http://localhost:8000`), or set `CORS_ORIGINS` in `.env` to include your frontend origin (comma-separated, no trailing slash).
+- **Using the deployed API (e.g. api-status-phi.vercel.app)**: To point the frontend at your Vercel API instead of local Django, set:
+  - **Frontend (local or in `.env.local`)**: `NEXT_PUBLIC_API_BASE=https://api-status-phi.vercel.app` (no trailing slash).
+  - **Vercel project env** (so the deployed API accepts requests from your frontend): `CORS_ORIGINS=http://localhost:3000,https://api-status-phi.vercel.app` (or whatever origin your UI is served from). `ALLOWED_HOSTS` already includes `.vercel.app`, so the domain is accepted.
+
 ## Deploy to Vercel
 
 1. Push the repo to GitHub and import the project in [Vercel](https://vercel.com).
