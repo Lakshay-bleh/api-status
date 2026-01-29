@@ -6,11 +6,6 @@
     { "src": "/api/v1/(.*)", "dest": "/api/v1/index.py" },
     { "src": "/api/v1", "dest": "/api/v1/index.py" }
   ],
-  "functions": {
-    "api/v1/index.py": {
-      "runtime": "python3.9"
-    }
-  },
   "crons": [
     { "path": "/api/v1/cron/run-checks", "schedule": "0 0 * * *" }
   ]
