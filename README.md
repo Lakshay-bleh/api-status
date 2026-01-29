@@ -65,9 +65,13 @@ Set `CRON_SECRET` in your env (or `.env`) and use the same value in the request.
    - `CRON_SECRET` – Secret for the cron endpoint (generate a random string).
    - `DATABASE_URL` – Neon Postgres connection string (from [Neon Console](https://console.neon.tech)).
 3. **Neon**: Create a project in Neon, copy the connection string, and add it as `DATABASE_URL`.
-4. **Migrations**: Run Django migrations against Neon before or after the first deploy:
-   - Either in a one-off step: `cd backend && python manage.py migrate` with `DATABASE_URL` set.
-   - Or add a build step / release phase that runs `python manage.py migrate` (e.g. in `vercel.json` or a script that Vercel runs).
+4. **Migrations (required for auth/register to work)**: The Vercel API uses Neon. You must run migrations against that DB once so tables like `auth_user` exist. From your machine (with the same `DATABASE_URL` as in Vercel, e.g. in project root `.env`):
+   ```bash
+   cd backend
+   pip install -r requirements.txt   # if not already
+   python manage.py migrate
+   ```
+   If your `.env` has `DATABASE_URL` set to the Neon connection string, this will create all tables in Neon. Without this step, register/login will return **500** and logs will show `relation "auth_user" does not exist`.
 5. Deploy. Vercel will build Next.js and deploy the Python function for `/api/v1/*`. The cron job will hit `/api/v1/cron/run-checks` every minute; ensure `CRON_SECRET` is set so the endpoint accepts the request (you may need to configure the cron to send the secret in a header or query param depending on Vercel’s cron features).
 
 ## How checks work
