@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/app/contexts/AuthContext";
@@ -34,7 +34,7 @@ function formatDate(iso: string) {
 
 type StatusFilter = "all" | "up" | "down";
 
-export default function Home() {
+function DashboardContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { token, user, loading: authLoading, logout } = useAuth();
@@ -313,5 +313,19 @@ export default function Home() {
         </section>
       </div>
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-gray-50 p-6 flex items-center justify-center">
+          <p className="text-gray-500">Loading...</p>
+        </main>
+      }
+    >
+      <DashboardContent />
+    </Suspense>
   );
 }

@@ -231,7 +231,7 @@ export default function EndpointDetailPage() {
         </div>
 
         {checks.length === 0 ? (
-          <p className="text-gray-500">No checks recorded yet. Use "Run check now" or wait for the cron.</p>
+          <p className="text-gray-500">No checks recorded yet. Use Run check now or wait for the cron.</p>
         ) : (
           <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow">
             <table className="min-w-full divide-y divide-gray-200">
