@@ -3,6 +3,10 @@ from .base import *  # noqa: F401, F403
 
 DEBUG = False
 
+# Django is mounted at /api/v1 on Vercel. Without this, redirects (e.g. append_slash) would
+# point to /auth/register/ instead of /api/v1/auth/register/, causing redirect loops.
+FORCE_SCRIPT_NAME = "/api/v1"
+
 CONN_MAX_AGE = 0
 CONN_HEALTH_CHECKS = True
 
