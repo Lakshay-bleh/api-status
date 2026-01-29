@@ -9,8 +9,10 @@ router.register(r"endpoints", views.EndpointViewSet, basename="endpoint")
 # Include both with and without trailing slash to avoid redirect loop:
 # Vercel/Next can 308 from /api/v1/auth/register/ → /api/v1/auth/register; Django would 301 back
 # if we only had the slash version. Accept both so no redirect is issued.
+# Router registers endpoints/ (with slash). Add endpoints (no slash) so 308 from Vercel doesn't 404.
 urlpatterns = [
     path("", include(router.urls)),
+    path("endpoints", views.EndpointViewSet.as_view({"get": "list", "post": "create"})),
     path("health/", views.health),
     path("health", views.health),
     path("cron/run-checks", views.run_checks),

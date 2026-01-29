@@ -122,7 +122,7 @@ export async function fetchMe(token: string): Promise<{ id: number; username: st
 }
 
 export async function fetchEndpoints(token: string | null, statusFilter?: "up" | "down"): Promise<EndpointItem[]> {
-  let url = apiUrl("/api/v1/endpoints/");
+  let url = apiUrl("/api/v1/endpoints");
   if (statusFilter) url += `?status=${statusFilter}`;
   const res = await fetch(url, { headers: authHeaders(token) });
   if (res.status === 401) throw new Error("Unauthorized");
@@ -184,7 +184,7 @@ export async function createEndpoint(
   token: string | null,
   body: { name: string; url: string; interval_minutes?: number }
 ): Promise<EndpointItem> {
-  const res = await fetch(apiUrl("/api/v1/endpoints/"), {
+  const res = await fetch(apiUrl("/api/v1/endpoints"), {
     method: "POST",
     headers: authHeaders(token),
     body: JSON.stringify(body),
