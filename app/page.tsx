@@ -3,11 +3,10 @@
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAuth } from "@/app/contexts/AuthContext";
+import { useAuth, getStoredToken } from "@/app/contexts/AuthContext";
 import {
   fetchEndpoints,
   fetchDashboardStats,
-  getStoredToken,
   type EndpointItem,
   type DashboardStats,
 } from "@/app/lib/api";
