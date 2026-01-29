@@ -84,7 +84,7 @@ export async function login(
   username: string,
   password: string
 ): Promise<{ user: { id: number; username: string; email: string }; access: string; refresh: string }> {
-  const res = await fetch(apiUrl("/api/v1/auth/login/"), {
+  const res = await fetch(apiUrl("/api/v1/auth/login"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
@@ -101,7 +101,7 @@ export async function register(
   password: string,
   email?: string
 ): Promise<{ user: { id: number; username: string; email: string }; access: string; refresh: string }> {
-  const res = await fetch(apiUrl("/api/v1/auth/register/"), {
+  const res = await fetch(apiUrl("/api/v1/auth/register"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password, email: email || "" }),
@@ -114,7 +114,7 @@ export async function register(
 }
 
 export async function fetchMe(token: string): Promise<{ id: number; username: string; email: string }> {
-  const res = await fetch(apiUrl("/api/v1/auth/me/"), {
+  const res = await fetch(apiUrl("/api/v1/auth/me"), {
     headers: { Authorization: `Bearer ${token}` },
   });
   if (!res.ok) throw new Error("Unauthorized");
