@@ -1,6 +1,8 @@
-import time
+import io
 import os
+import time
 import requests
+from django.core.management import call_command
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET, require_http_methods
 from django.views.decorators.csrf import csrf_exempt
@@ -21,6 +23,27 @@ from .serializers import (
 
 def health(request):
     return JsonResponse({"status": "ok"})
+
+
+@csrf_exempt
+@require_GET
+def run_migrate(request):
+    """
+    Run Django migrations against the current database (same DB as the deployed API).
+    Call once after deploy if you see "relation auth_user does not exist".
+    Requires CRON_SECRET: ?secret=... or Authorization: Bearer <CRON_SECRET>.
+    """
+    if not _validate_cron_secret(request):
+        return JsonResponse({"error": "Unauthorized"}, status=401)
+    out = io.StringIO()
+    try:
+        call_command("migrate", "--noinput", stdout=out)
+        return JsonResponse({"ok": True, "output": out.getvalue()})
+    except Exception as e:
+        return JsonResponse(
+            {"ok": False, "error": str(e), "output": out.getvalue()},
+            status=500,
+        )
 
 
 def _validate_cron_secret(request):

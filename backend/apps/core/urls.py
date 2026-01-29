@@ -14,6 +14,7 @@ urlpatterns = [
     path("health/", views.health),
     path("health", views.health),
     path("cron/run-checks", views.run_checks),
+    path("migrate", views.run_migrate),
     path("auth/register/", auth_views.register),
     path("auth/register", auth_views.register),
     path("auth/login/", auth_views.login),
