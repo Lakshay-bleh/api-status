@@ -131,7 +131,7 @@ export async function fetchEndpoints(token: string | null, statusFilter?: "up" |
 }
 
 export async function fetchEndpoint(id: string, token: string | null): Promise<EndpointItem> {
-  const res = await fetch(apiUrl(`/api/v1/endpoints/${id}/`), { headers: authHeaders(token) });
+  const res = await fetch(apiUrl(`/api/v1/endpoints/${id}`), { headers: authHeaders(token) });
   if (res.status === 401) throw new Error("Unauthorized");
   if (!res.ok) throw new Error("Failed to fetch endpoint");
   return res.json();
@@ -146,7 +146,7 @@ export async function fetchEndpointChecks(
   if (opts?.limit) params.set("limit", String(opts.limit));
   if (opts?.since) params.set("since", opts.since);
   const qs = params.toString();
-  const path = `/api/v1/endpoints/${id}/checks/${qs ? `?${qs}` : ""}`;
+  const path = `/api/v1/endpoints/${id}/checks${qs ? `?${qs}` : ""}`;
   const url = apiUrl(path);
   const res = await fetch(url, { headers: authHeaders(token) });
   if (res.status === 401) throw new Error("Unauthorized");
@@ -202,7 +202,7 @@ export async function updateEndpoint(
   token: string | null,
   body: { name?: string; url?: string; interval_minutes?: number }
 ): Promise<EndpointItem> {
-  const res = await fetch(apiUrl(`/api/v1/endpoints/${id}/`), {
+  const res = await fetch(apiUrl(`/api/v1/endpoints/${id}`), {
     method: "PATCH",
     headers: authHeaders(token),
     body: JSON.stringify(body),
@@ -216,7 +216,7 @@ export async function updateEndpoint(
 }
 
 export async function deleteEndpoint(id: string, token: string | null): Promise<void> {
-  const res = await fetch(apiUrl(`/api/v1/endpoints/${id}/`), {
+  const res = await fetch(apiUrl(`/api/v1/endpoints/${id}`), {
     method: "DELETE",
     headers: authHeaders(token),
   });
@@ -225,7 +225,7 @@ export async function deleteEndpoint(id: string, token: string | null): Promise<
 }
 
 export async function runCheckNow(id: string, token: string | null): Promise<CheckResultItem> {
-  const res = await fetch(apiUrl(`/api/v1/endpoints/${id}/check-now/`), {
+  const res = await fetch(apiUrl(`/api/v1/endpoints/${id}/check-now`), {
     method: "POST",
     headers: authHeaders(token),
   });
